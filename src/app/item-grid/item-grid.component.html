@@ -1,0 +1,6 @@
+<div class="grid-wrapper">
+    <item-grid-entry *ngFor="let item of items | async; trackBy: trackByFn"
+                     [item]="item"
+                     (click)="onItemClick(item)">
+    </item-grid-entry>
+</div>

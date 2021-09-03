@@ -1,0 +1,24 @@
+:host {
+    height: 100%;
+    overflow-y: auto;
+    display: grid;
+    grid-template-rows: auto 70px;
+}
+
+.cart {
+    overflow-y: auto;
+}
+
+.remove-entry {
+    user-select: none;
+    cursor: pointer;
+}
+
+.checkout {
+    margin: 8px;
+    display: flex;
+    gap: 5px;
+    button:first-child {
+        flex-grow: 1;
+    }
+}

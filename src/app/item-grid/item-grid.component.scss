@@ -1,0 +1,11 @@
+:host {
+    height: 100%;
+    overflow-y: auto;
+}
+
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 120px);
+    gap: 15px;
+    padding: 15px;
+}

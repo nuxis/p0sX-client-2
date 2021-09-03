@@ -1,0 +1,33 @@
+.toolbar {
+    position: relative;
+    z-index: 1;
+    gap: 10px;
+
+    .toolbar-spacer {
+        flex-grow: 1;
+    }
+
+    img {
+        height: 56px;
+        width: 56px;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .divider {
+        height: 100%;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        border-left: 1px solid rgba(0, 0, 0, 0.15);
+    }
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 170px auto 240px;
+    height: calc(100% - 64px);
+    width: 100%;
+}

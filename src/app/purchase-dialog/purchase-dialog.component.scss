@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+mat-dialog-content.mat-dialog-content {
+    flex-grow: 1;
+}
+
+.purchase-icon {
+    font-size: 150px;
+    width: unset;
+    height: unset;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.rotate {
+    overflow: hidden;
+    .purchase-icon {
+        overflow: hidden;
+        animation: rotation 2s infinite linear;
+    }
+}
+
+@keyframes rotation  {
+    from{
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(-359deg);
+    }
+}

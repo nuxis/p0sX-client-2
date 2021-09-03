@@ -1,0 +1,13 @@
+<h1 mat-dialog-title>Scan badge to check credit</h1>
+<div mat-dialog-content>
+    <div class="credit">
+        This person has {{left}},- of {{credit}},- remaining.
+    </div>
+    <mat-form-field appearance="fill">
+        <mat-label>Badge number</mat-label>
+        <input type="password" matInput [(ngModel)]="badge" (keyup.enter)="onEnter()" autocomplete="off">
+    </mat-form-field>
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Close</button>
+</mat-dialog-actions>

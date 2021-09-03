@@ -1,0 +1,25 @@
+<h1 mat-dialog-title *ngIf="!purchaseCompleted">Please pay {{total}}Kr</h1>
+<h1 mat-dialog-title *ngIf="purchaseCompleted">Purchase complete. Order number: <u>{{orderId}}</u></h1>
+<mat-dialog-content *ngIf="!purchaseCompleted && !purchaseInProgress">
+    <mat-form-field appearance="fill">
+        <mat-label>Badge number</mat-label>
+        <input [disabled]="purchaseInProgress"
+               type="password"
+               matInput
+               [(ngModel)]="badge"
+               (keyup.enter)="onPurchase()"
+               autocomplete="off">
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-content class="centered-text" *ngIf="purchaseCompleted">
+    <mat-icon class="purchase-icon" color="accent">done</mat-icon>
+</mat-dialog-content>
+<mat-dialog-content class="centered-text rotate" *ngIf="purchaseInProgress">
+    <mat-icon class="purchase-icon" color="accent">sync</mat-icon>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button [disabled]="purchaseInProgress" (click)="onCancel()">Close</button>
+    <button *ngIf="!purchaseCompleted" [disabled]="purchaseInProgress" mat-button (click)="onPurchase()">
+        Purchase
+    </button>
+</mat-dialog-actions>

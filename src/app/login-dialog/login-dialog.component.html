@@ -1,0 +1,10 @@
+<h1 mat-dialog-title>Scan badge to log in</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Badge number</mat-label>
+        <input type="password" matInput [(ngModel)]="badge" (keyup.enter)="onLogin()" autocomplete="off">
+    </mat-form-field>
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onLogin()">Login</button>
+</mat-dialog-actions>

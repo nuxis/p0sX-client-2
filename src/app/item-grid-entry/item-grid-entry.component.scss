@@ -1,0 +1,59 @@
+$width: 120px;
+$padding: 2px;
+
+:host {
+    width: $width;
+}
+
+.disabled {
+    .disabled-overlay {
+        cursor: not-allowed;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(#303030, 0.7);
+    }
+
+    img {
+        filter: brightness(0.3);
+    }
+}
+
+::ng-deep.light-theme {
+    .disabled > img {
+        filter: unset !important;
+    }
+}
+
+.grid-item {
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+    display: inline-block;
+    width: $width;
+    cursor: pointer;
+    border-radius: $padding*2;
+    transition: transform .05s;
+    &:not(.disabled):hover {
+        z-index: 1;
+        transform: scale(1.1);
+    }
+
+    img {
+        pointer-events: none;
+        height: $width - $padding*2;
+        width: $width - $padding*2;
+        padding: $padding;
+        display: block;
+    }
+
+    div {
+        padding: $padding;
+        width: calc(#{$width - 2*$padding});
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}

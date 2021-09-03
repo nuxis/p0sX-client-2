@@ -1,0 +1,63 @@
+@use 'sass:map';
+@use '~@angular/material' as mat;
+
+@use 'app/item-grid-entry/item-grid-entry-theme' as item-grid-entry;
+
+@include mat.core();
+
+$warn: mat.define-palette(mat.$red-palette);
+
+$dark-primary: mat.define-palette(mat.$pink-palette);
+$dark-accent: mat.define-palette(mat.$blue-grey-palette);
+$dark-theme: mat.define-dark-theme((
+    color: (
+        primary: $dark-primary,
+        accent: $dark-accent,
+        warn: $warn
+    )
+));
+
+$light-primary: mat.define-palette(mat.$light-blue-palette);
+$light-accent: mat.define-palette(mat.$cyan-palette);
+$light-theme: mat.define-light-theme((
+    color: (
+        primary: $light-primary,
+        accent: $light-accent,
+        warn: $warn
+    )
+));
+
+@include mat.core-theme($dark-theme);
+@include mat.all-component-themes($dark-theme);
+@include item-grid-entry.theme($dark-theme);
+
+.light-theme {
+    @include mat.core-color($light-theme);
+    @include mat.all-component-colors($light-theme);
+    @include item-grid-entry.color($light-theme);
+}
+
+mat-dialog-actions.mat-dialog-actions {
+    justify-content: flex-end;
+}
+
+mat-form-field.mat-form-field {
+    width: 100%;
+}
+
+::-webkit-scrollbar {
+    width: .6em;
+    overflow-y: scroll;
+    background: none;
+    box-shadow: none;
+}
+
+::-webkit-scrollbar-thumb {
+    background: map.get(mat.$grey-palette, 600);
+}
+
+.light-theme {
+    ::-webkit-scrollbar-thumb {
+        background: map.get(mat.$grey-palette, 700);
+    }
+}

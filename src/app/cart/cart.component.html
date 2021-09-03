@@ -1,0 +1,27 @@
+<div class="cart">
+    <mat-list>
+        <mat-list-item *ngFor="let entry of cart; let i = index; trackBy: trackByFn"
+                       [ngClass]="{'mat-list-option': canCustomize(entry)}"
+                       (click)="onCustomizeEntry(entry, i)" >
+            <img mat-list-avatar [src]="getItemImage(entry.item)" alt="...">
+            <div mat-line>{{entry.item.name}}</div>
+            <div mat-line>{{entry.price}},-</div>
+            <mat-icon class="remove-entry" title="Remove" (click)="removeEntry($event, i)" color="warn">delete</mat-icon>
+        </mat-list-item>
+    </mat-list>
+</div>
+
+<div class="checkout">
+    <button mat-raised-button
+            color="accent"
+            [disabled]="isEmpty"
+            (click)="onPurchase()">
+        TOTAL {{total}},-
+    </button>
+    <button mat-raised-button
+            color="warn"
+            [disabled]="isEmpty"
+            (click)="onEmptyCart()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>
