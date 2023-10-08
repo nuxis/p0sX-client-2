@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 
 @use 'app/item-grid-entry/item-grid-entry-theme' as item-grid-entry;
 
@@ -7,7 +7,7 @@
 
 $warn: mat.define-palette(mat.$red-palette);
 
-$dark-primary: mat.define-palette(mat.$pink-palette);
+$dark-primary: mat.define-palette(mat.$blue-palette);
 $dark-accent: mat.define-palette(mat.$blue-grey-palette);
 $dark-theme: mat.define-dark-theme((
     color: (

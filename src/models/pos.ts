@@ -1,5 +1,4 @@
-export const DEFAULT_IMAGE_URL = "/assets/planet.png";
-export const BASE_URL = "http://192.168.1.211:9000";
+export const DEFAULT_IMAGE_URL = "assets/planet.png";
 
 export enum PaymentMethod
 {
@@ -36,7 +35,7 @@ export interface IItem
     readonly stock: number;
     readonly barcode: string;
     readonly category: CategoryId;
-    readonly image: string;
+    readonly image: string | undefined;
     readonly created_in_the_kitchen: boolean;
     readonly ingredients?: IIngredient[]
 }

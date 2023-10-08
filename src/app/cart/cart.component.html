@@ -13,12 +13,14 @@
 
 <div class="checkout">
     <button mat-raised-button
-            color="accent"
+            color="primary"
+            title="Purchase"
             [disabled]="isEmpty"
             (click)="onPurchase()">
         TOTAL {{total}},-
     </button>
     <button mat-raised-button
+            title="Empty cart"
             color="warn"
             [disabled]="isEmpty"
             (click)="onEmptyCart()">

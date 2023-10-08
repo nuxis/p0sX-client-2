@@ -21,7 +21,7 @@ import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import { CustomizeItemDialogComponent } from './customize-item-dialog/customize-item-dialog.component';
+import {CustomizeItemDialogComponent} from './customize-item-dialog/customize-item-dialog.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatRadioModule} from "@angular/material/radio";
 import {CreditCheckDialogComponent} from "./credit-check-dialog/credit-check-dialog.component";

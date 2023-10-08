@@ -19,7 +19,10 @@
 </mat-dialog-content>
 <mat-dialog-actions>
     <button mat-button [disabled]="purchaseInProgress" (click)="onCancel()">Close</button>
-    <button *ngIf="!purchaseCompleted" [disabled]="purchaseInProgress" mat-button (click)="onPurchase()">
+    <button *ngIf="!purchaseCompleted"
+            [disabled]="purchaseInProgress"
+            mat-raised-button color="primary"
+            (click)="onPurchase()">
         Purchase
     </button>
 </mat-dialog-actions>

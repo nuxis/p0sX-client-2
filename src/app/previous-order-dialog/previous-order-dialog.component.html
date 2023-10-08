@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Order {{order.id}}</h1>
+<div mat-dialog-content>
+    <div *ngFor="let line of order.lines">
+        <b>{{line.id}}</b> - {{line.item.name}}
+        <ng-container *ngIf="line.ingredients.length > 0">
+            <span> with </span>
+            <span *ngFor="let ingredient of line.ingredients; let last = last">
+                {{ingredient.name}}
+                <span *ngIf="!last">,</span>
+            </span>
+        </ng-container>
+    </div>
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onUndoOrder()">Undo</button>
+    <button mat-button (click)="onCancel()">Close</button>
+</mat-dialog-actions>

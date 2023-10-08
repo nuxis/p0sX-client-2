@@ -3,7 +3,8 @@ import {MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatInput} from "@angular/material/input";
 import {HttpClient} from "@angular/common/http";
-import {BASE_URL, IUser} from "@models/pos";
+import {IUser} from "@models/pos";
+import {ConfigService} from "@services/config.service";
 
 @Component({
   selector: 'login-dialog',
@@ -18,6 +19,7 @@ export class LoginDialogComponent implements AfterViewInit {
     private badgeInput: MatInput | undefined = undefined;
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent, IUser>,
+                private config: ConfigService,
                 private http: HttpClient,
                 private snackbar: MatSnackBar) {}
 
@@ -40,7 +42,7 @@ export class LoginDialogComponent implements AfterViewInit {
         }
 
         this.http
-            .get<IUser[]>(`${BASE_URL}/user/?format=json&card=${this.badge}`)
+            .get<IUser[]>(`${this.config.baseUrl}/user/?format=json&card=${this.badge}`)
             .subscribe(users => {
                 this.badge = "";
                 if(!users || users.length === 0)

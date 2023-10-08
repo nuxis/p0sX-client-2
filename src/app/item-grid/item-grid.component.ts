@@ -38,7 +38,7 @@ export class ItemGridComponent
         {
             this.snackbar.open(`${item.name} is not in stock`, "Close");
         }
-        else if(item.created_in_the_kitchen && item.ingredients && item.ingredients.length > 0)
+        else if(item.ingredients && item.ingredients.length > 0)
         {
             this.openDialog(item);
         }

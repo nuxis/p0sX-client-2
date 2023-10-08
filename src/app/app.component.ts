@@ -4,7 +4,9 @@ import {CreditCheckDialogComponent} from "./credit-check-dialog/credit-check-dia
 import {StockService} from "@services/stock.service";
 import {CartService} from "@services/cart.service";
 import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
-import {IUser} from "@models/pos";
+import {IOrder, IUser} from "@models/pos";
+import {HttpClient} from "@angular/common/http";
+import {ConfigService} from "@services/config.service";
 
 @Component({
     selector: 'root',
@@ -19,6 +21,8 @@ export class AppComponent implements AfterViewChecked {
     isLightTheme: boolean = false;
 
     constructor(private renderer: Renderer2,
+                private config: ConfigService,
+                private http: HttpClient,
                 private dialog: MatDialog,
                 private stockService: StockService,
                 private cartService: CartService)
@@ -129,5 +133,18 @@ export class AppComponent implements AfterViewChecked {
                 this.stockService.login(user);
             }
         });
+    }
+
+    onPrintReceipt()
+    {
+        const previousOrderString = localStorage.getItem('previous-order');
+        if(!previousOrderString)
+        {
+            return;
+        }
+        const order = JSON.parse(previousOrderString) as IOrder;
+        this.http
+            .get(`${this.config.baseUrl}/receipt/${order.id}`)
+            .subscribe();
     }
 }

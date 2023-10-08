@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, forkJoin, Observable, timer} from "rxjs";
-import {BASE_URL, ICategory, IDiscount, IItem, IUser} from "@models/pos";
+import {ICategory, IDiscount, IItem, IUser} from "@models/pos";
 import {HttpClient} from "@angular/common/http";
 import {map} from "rxjs/operators";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {ConfigService} from "@services/config.service";
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +23,7 @@ export class StockService
         return this.currentCashier$;
     }
 
-    constructor(private http: HttpClient, private snackbar: MatSnackBar)
+    constructor(private http: HttpClient, private snackbar: MatSnackBar, private config: ConfigService)
     {
         timer(0, 60 * 1000).subscribe(() => this.fetchData());
     }
@@ -39,21 +40,24 @@ export class StockService
 
     private fetchData()
     {
-        const itemRequest =  this.http.get<IItem[]>(`${BASE_URL}/items`);
-        const categoryRequest =  this.http.get<IItem[]>(`${BASE_URL}/categories`);
-        const discountRequest =  this.http.get<IDiscount[]>(`${BASE_URL}/discounts`);
+        const itemRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/items`);
+        const categoryRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/categories`);
+        const discountRequest =  this.http.get<IDiscount[]>(`${this.config.baseUrl}/discounts`);
 
         forkJoin([itemRequest, categoryRequest, discountRequest])
-            .subscribe(([items, categories, discounts]) => {
-                this.categories$.next(categories);
-                this.items$.next(items);
-                this.discounts$ = discounts;
-                for(const item of items)
-                {
-                    this.itemById.set(item.id, item);
+            .subscribe({
+                next: ([items, categories, discounts]) => {
+                    this.categories$.next(categories);
+                    this.items$.next(items);
+                    this.discounts$ = discounts;
+                    for(const item of items)
+                    {
+                        this.itemById.set(item.id, item);
+                    }
+                },
+                error: () => {
+                    this.snackbar.open("Failed to load data", "Close");
                 }
-            }, () => {
-                this.snackbar.open("Failed to load data", "Close");
             });
     }
 

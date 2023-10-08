@@ -21,7 +21,7 @@ $padding: 2px;
     }
 }
 
-::ng-deep.light-theme {
+:host ::ng-deep.light-theme {
     .disabled > img {
         filter: unset !important;
     }

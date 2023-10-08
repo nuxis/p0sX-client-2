@@ -138,14 +138,16 @@ export class CartComponent implements OnInit
             const item = this.stockService.resolveItemId(discount.item)!;
             const func = eval(discount.expression) as (cart: ICartEntry[]) => IDiscountResult;
             const result = func(cartItems);
-            result.used.forEach(item => {
+            for(const item of result.used)
+            {
                 const index = cartItems.indexOf(item);
                 cartItems = [
                     ...cartItems.slice(0, index),
                     ...cartItems.slice(index + 1)
-                ]
-            });
-            for (let i = 0; i < result.count; i++) {
+                ];
+            }
+            for (let i = 0; i < result.count; i++)
+            {
                 this.cartService.addToCart({
                     discount: true,
                     item: item,

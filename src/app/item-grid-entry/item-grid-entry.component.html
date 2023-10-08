@@ -5,7 +5,7 @@
      [title]="item.name"
      [defaultElevation]="4"
      [raisedElevation]="12">
-    <img alt="Descriptive image" mat-card-image [src]="item.image ?? DEFAULT_IMAGE_URL">
+    <img [alt]="'Image of ' + item.name" mat-card-image [src]="item.image ?? DEFAULT_IMAGE_URL">
     <div>{{item.name}}</div>
     <div>{{item.price}} Kr</div>
 </div>
@@ -13,12 +13,12 @@
 <div class="grid-item disabled"
      *ngIf="item.stock <= 0"
      mat-elevation
-     [title]="item.name"
+     [title]="item.name + ' is not in stock'"
      [defaultElevation]="4"
      [raisedElevation]="4">
     <img alt="Descriptive image" mat-card-image [src]="item.image ?? DEFAULT_IMAGE_URL">
     <div>{{item.name}}</div>
     <div>{{item.price}} Kr</div>
 
-    <div class="disabled-overlay" *ngIf="item.stock === 0"></div>
+    <div class="disabled-overlay"></div>
 </div>

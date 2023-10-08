@@ -6,32 +6,26 @@ import {
     HttpInterceptor
 } from '@angular/common/http';
 import {Observable} from 'rxjs';
+import {ConfigService} from "@services/config.service";
 
 @Injectable()
 export class AuthorizationInterceptor implements HttpInterceptor
 {
-    private token?: string = undefined;
-
-    constructor()
+    constructor(private config: ConfigService)
     {
     }
 
     intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>>
     {
-        if(this.token == undefined)
+        if(this.config.authToken === null)
         {
-            this.loadToken();
+            return next.handle(request);
         }
+
         return next.handle(request.clone({
             setHeaders: {
-                "Authorization": `Token ${this.token}`
+                "Authorization": `Token ${this.config.authToken}`
             }
         }));
-    }
-
-    private loadToken()
-    {
-        window.localStorage.setItem("token", "bff7df00159b27b3f77d68d8014b8d2ee86fd448");
-        this.token = window.localStorage.getItem("token") ?? undefined;
     }
 }

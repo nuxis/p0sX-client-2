@@ -1,19 +1,21 @@
-import {Component, OnDestroy, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ViewChild} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BASE_URL, IOrder, IPurchaseInput, PaymentMethod} from "@models/pos";
+import {ICreditCheck, IOrder, IPurchaseInput, PaymentMethod} from "@models/pos";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {CartService} from "@services/cart.service";
 import {StockService} from "@services/stock.service";
 import {MatInput} from "@angular/material/input";
 import {Subscription} from "rxjs";
+import {map} from 'rxjs/operators';
+import {ConfigService} from "@services/config.service";
 
 @Component({
   selector: 'purchase-dialog',
   templateUrl: './purchase-dialog.component.html',
   styleUrls: ['./purchase-dialog.component.scss']
 })
-export class PurchaseDialogComponent implements OnDestroy{
+export class PurchaseDialogComponent implements OnDestroy, AfterViewInit {
     private closeSubscription: Subscription | undefined = undefined;
 
     badge: string = "";
@@ -25,6 +27,7 @@ export class PurchaseDialogComponent implements OnDestroy{
     private badgeInput: MatInput | undefined = undefined;
 
     constructor(public dialogRef: MatDialogRef<PurchaseDialogComponent>,
+                private config: ConfigService,
                 private cartService: CartService,
                 private stockService: StockService,
                 private http: HttpClient,
@@ -38,6 +41,12 @@ export class PurchaseDialogComponent implements OnDestroy{
     onCancel()
     {
         this.dialogRef.close();
+    }
+
+    private verifyCredit(badge: string)
+    {
+        return this.http.get<ICreditCheck>(`${this.config.baseUrl}/credit/${badge}`)
+            .pipe(map(result => result.left > this.cartService.total));
     }
 
     onPurchase()
@@ -71,26 +80,51 @@ export class PurchaseDialogComponent implements OnDestroy{
         };
         this.badge = "";
         this.purchaseInProgress = true;
-        this.http
-            .post<IOrder>(`${BASE_URL}/purchases/?format=json`, input)
-            .subscribe(order => {
-                this.orderId = order.id;
-                this.purchaseCompleted = true;
-                this.cartService.emptyCart();
-                this.purchaseInProgress = false;
 
-                window.localStorage.setItem("previous-order", JSON.stringify(order))
-                const timeout = setTimeout(() => this.dialogRef.close(true), 5000);
-                this.closeSubscription = this.dialogRef
-                    .afterClosed()
-                    .subscribe(() => clearTimeout(timeout));
-            }, (e: HttpErrorResponse) => {
-                const message = e.error.detail as string;
+        this.verifyCredit(input.card).subscribe(success => {
+            if(!success)
+            {
+                this.snackbar.open("Not enough credit left on card", "Close");
                 this.purchaseInProgress = false;
-                this.snackbar.open(message, "Close");
 
                 setTimeout(() => this.badgeInput?.focus());
-            });
+                return;
+            }
+
+            this.http
+                .post<IOrder>(`${this.config.baseUrl}/purchases/?format=json`, input)
+                .subscribe({
+                    next: order => {
+                        this.orderId = order.id;
+                        this.purchaseCompleted = true;
+                        this.cartService.emptyCart();
+                        this.purchaseInProgress = false;
+
+                        window.localStorage.setItem("previous-order", JSON.stringify(order))
+                        const timeout = setTimeout(() => this.dialogRef.close(true), 5000);
+                        this.closeSubscription = this.dialogRef
+                            .afterClosed()
+                            .subscribe(() => clearTimeout(timeout));
+                    },
+                    error: (e: HttpErrorResponse) => {
+                        const message = e.error.detail as string;
+                        this.purchaseInProgress = false;
+                        this.snackbar.open(message, "Close");
+
+                        setTimeout(() => this.badgeInput?.focus());
+                    }
+                });
+        });
+    }
+
+    ngAfterViewInit()
+    {
+        this.badgeInput?.stateChanges.subscribe(() => {
+            if(!this.badgeInput?.focused)
+            {
+                this.badgeInput?.focus();
+            }
+        });
     }
 
     ngOnDestroy(): void

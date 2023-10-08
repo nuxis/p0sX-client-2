@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="toolbar mat-elevation-z4">
-    <img src="/assets/logo-56x56.png" alt="p0sX logo" />
+    <img src="assets/logo-56x56.png" alt="p0sX logo" />
     <span class="toolbar-spacer">{{title}}</span>
     <span class="user" *ngIf="currentCashier">
         <mat-icon>person</mat-icon>
@@ -7,7 +7,7 @@
         {{currentCashier.last_name}}
     </span>
     <span *ngIf="currentCashier" class="divider"></span>
-    <button mat-icon-button matTooltip="Print receipt">
+    <button mat-icon-button (click)="onPrintReceipt()" matTooltip="Print receipt">
         <mat-icon>receipt</mat-icon>
     </button>
     <button mat-icon-button (click)="onOpenCreditCheckDialog()" matTooltip="Check credit">

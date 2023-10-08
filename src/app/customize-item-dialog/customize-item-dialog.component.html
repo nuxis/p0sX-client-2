@@ -8,21 +8,19 @@
                     color="primary">
                 {{ingredient.name}}
                 <span *ngIf="ingredient.price > 0">+{{ingredient.price}},-</span>
+                <span *ngIf="ingredient.price < 0">-{{ingredient.price}},-</span>
             </button>
             <button *ngSwitchCase="false"
                     (click)="onIngredientToggle(ingredient)"
                     mat-stroked-button>
                 {{ingredient.name}}
                 <span *ngIf="ingredient.price > 0">+{{ingredient.price}},-</span>
+                <span *ngIf="ingredient.price < 0">-{{ingredient.price}},-</span>
             </button>
         </ng-container>
     </div>
-    <mat-form-field appearance="fill">
-        <mat-label>Message</mat-label>
-        <input matInput [(ngModel)]="message" placeholder="Ex. Extra spit">
-    </mat-form-field>
 </div>
 <mat-dialog-actions>
     <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-button (click)="onReturn()" cdkFocusInitial>{{data.isEdit ? 'Update' : 'Add to cart'}}</button>
+    <button mat-raised-button color="primary" (click)="onReturn()" cdkFocusInitial>{{data.isEdit ? 'Update' : 'Add to cart'}}</button>
 </mat-dialog-actions>
