@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialogRef} from "@angular/material/dialog";
 import {HttpClient, HttpErrorResponse} from "@angular/common/http";
-import {BASE_URL, IOrder, IPurchaseInput, PaymentMethod} from "@models/pos";
+import {IOrder, IPurchaseInput, PaymentMethod} from "@models/pos";
+import {ConfigService} from "@services/config.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
@@ -12,6 +13,7 @@ import {MatSnackBar} from "@angular/material/snack-bar";
 export class PreviousOrderDialog implements OnInit {
 
     constructor(public dialogRef: MatDialogRef<PreviousOrderDialog>,
+                private config: ConfigService,
                 private http: HttpClient,
                 private snackbar: MatSnackBar)
     {
@@ -44,7 +46,7 @@ export class PreviousOrderDialog implements OnInit {
             }))
         };
         this.http
-            .post<IOrder>(`${BASE_URL}/purchases/?format=json`, input)
+            .post<IOrder>(`${this.config.baseUrl}/purchases/?format=json`, input)
             .subscribe(order => {
                 this.snackbar.open("The last order has been undone", "Close");
                 window.localStorage.removeItem("previous-order");

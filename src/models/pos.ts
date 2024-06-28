@@ -93,7 +93,7 @@ export interface IOrderLine
     readonly ingredients: {
         readonly id: number;
         readonly name: string;
-    };
+    }[];
     readonly item: {
         readonly id: number;
         readonly name: string;

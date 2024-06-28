@@ -42,16 +42,15 @@ export class LoginDialogComponent implements AfterViewInit {
         }
 
         this.http
-            .get<IUser[]>(`${this.config.baseUrl}/user/?format=json&card=${this.badge}`)
-            .subscribe(users => {
+            .get<IUser>(`${this.config.baseUrl}/user/${this.badge}?format=json`)
+            .subscribe(user => {
                 this.badge = "";
-                if(!users || users.length === 0)
+                if(!user)
                 {
                     this.snackbar.open("User not found", "Close");
                     return;
                 }
 
-                const user = users[0];
                 if(!user.is_cashier)
                 {
                     this.snackbar.open("You must be a cashier to log in", "Close");

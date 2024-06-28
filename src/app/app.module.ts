@@ -29,6 +29,7 @@ import {MAT_SNACK_BAR_DEFAULT_OPTIONS, MatSnackBarConfig, MatSnackBarModule} fro
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {PurchaseDialogComponent} from "./purchase-dialog/purchase-dialog.component";
 import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
+import { PreviousOrderDialog } from './previous-order-dialog/previous-order-dialog.component';
 
 @NgModule({
     declarations: [
@@ -41,7 +42,8 @@ import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
         CustomizeItemDialogComponent,
         CreditCheckDialogComponent,
         PurchaseDialogComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        PreviousOrderDialog
     ],
     imports: [
         BrowserModule,

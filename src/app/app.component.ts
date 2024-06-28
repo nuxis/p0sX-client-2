@@ -7,6 +7,7 @@ import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
 import {IOrder, IUser} from "@models/pos";
 import {HttpClient} from "@angular/common/http";
 import {ConfigService} from "@services/config.service";
+import { PreviousOrderDialog } from './previous-order-dialog/previous-order-dialog.component';
 
 @Component({
     selector: 'root',
@@ -98,6 +99,13 @@ export class AppComponent implements AfterViewChecked {
     onOpenCreditCheckDialog()
     {
         this.dialog.open(CreditCheckDialogComponent, {
+            width: "600px"
+        });
+    }
+
+    onOpenPreviousOrderDialog()
+    {
+        this.dialog.open(PreviousOrderDialog, {
             width: "600px"
         });
     }
