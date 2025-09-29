@@ -1,18 +1,19 @@
-import {AfterViewChecked, Component, HostListener, Renderer2} from '@angular/core';
-import {MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {AfterViewChecked, ChangeDetectorRef, Component, HostListener, Renderer2} from '@angular/core';
 import {CreditCheckDialogComponent} from "./credit-check-dialog/credit-check-dialog.component";
 import {StockService} from "@services/stock.service";
 import {CartService} from "@services/cart.service";
 import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
 import {IOrder, IUser} from "@models/pos";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {ConfigService} from "@services/config.service";
 import { PreviousOrderDialog } from './previous-order-dialog/previous-order-dialog.component';
+import {MatDialog, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
     selector: 'root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    standalone: false
 })
 export class AppComponent implements AfterViewChecked {
     private barcodeBuffer: string = "";
@@ -26,7 +27,8 @@ export class AppComponent implements AfterViewChecked {
                 private http: HttpClient,
                 private dialog: MatDialog,
                 private stockService: StockService,
-                private cartService: CartService)
+                private cartService: CartService,
+                private changeDetector: ChangeDetectorRef)
     {
         document.title = this.title;
         if(window.localStorage.getItem("light-theme") === "true")
@@ -81,17 +83,17 @@ export class AppComponent implements AfterViewChecked {
         if(this.isLightTheme)
         {
             window.localStorage.removeItem("light-theme");
-            this.renderer.removeClass(document.body, "light-theme");
+            this.renderer.removeClass(document.documentElement, "light-theme");
         }
         else
         {
             window.localStorage.setItem("light-theme", "true");
-            this.renderer.addClass(document.body, "light-theme");
+            this.renderer.addClass(document.documentElement, "light-theme");
         }
         this.isLightTheme = !this.isLightTheme;
     }
 
-    get icon()
+    get themeIcon()
     {
         return this.isLightTheme ? "dark_mode" : "light_mode";
     }
@@ -140,6 +142,7 @@ export class AppComponent implements AfterViewChecked {
             {
                 this.stockService.login(user);
             }
+            this.changeDetector.detectChanges();
         });
     }
 

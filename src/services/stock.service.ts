@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, forkJoin, Observable, timer} from "rxjs";
 import {ICategory, IDiscount, IItem, IUser} from "@models/pos";
-import {HttpClient} from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import {map} from "rxjs/operators";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfigService} from "@services/config.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Injectable({
     providedIn: 'root'
@@ -40,9 +40,9 @@ export class StockService
 
     private fetchData()
     {
-        const itemRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/items`);
-        const categoryRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/categories`);
-        const discountRequest =  this.http.get<IDiscount[]>(`${this.config.baseUrl}/discounts`);
+        const itemRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/items/`);
+        const categoryRequest =  this.http.get<IItem[]>(`${this.config.baseUrl}/categories/`);
+        const discountRequest =  this.http.get<IDiscount[]>(`${this.config.baseUrl}/discounts/`);
 
         forkJoin([itemRequest, categoryRequest, discountRequest])
             .subscribe({

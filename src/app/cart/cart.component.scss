@@ -1,8 +1,11 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
 :host {
     height: 100%;
     overflow-y: auto;
     display: grid;
-    grid-template-rows: auto 70px;
+    grid-template-rows: auto max-content;
 }
 
 .cart {
@@ -12,6 +15,9 @@
 .remove-entry {
     user-select: none;
     cursor: pointer;
+    @include mat.icon-overrides((
+        color: var(--mat-sys-on-error-container)
+    ));
 }
 
 .checkout {
@@ -21,4 +27,19 @@
     button:first-child {
         flex-grow: 1;
     }
+}
+
+
+.empty-cart {
+    color: var(--mat-sys-on-error-container);
+    @include mat.fab-overrides((
+        container-color: var(--mat-sys-error-container),
+    ));
+}
+
+.cart-entry-meta {
+    display: flex !important;
+    height: 100%;
+    flex-direction: row;
+    align-items: center
 }

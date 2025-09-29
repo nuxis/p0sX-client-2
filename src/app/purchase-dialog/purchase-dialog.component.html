@@ -1,28 +1,44 @@
-<h1 mat-dialog-title *ngIf="!purchaseCompleted">Please pay {{total}}Kr</h1>
-<h1 mat-dialog-title *ngIf="purchaseCompleted">Purchase complete. Order number: <u>{{orderId}}</u></h1>
-<mat-dialog-content *ngIf="!purchaseCompleted && !purchaseInProgress">
-    <mat-form-field appearance="fill">
-        <mat-label>Badge number</mat-label>
-        <input [disabled]="purchaseInProgress"
-               type="password"
-               matInput
-               [(ngModel)]="badge"
-               (keyup.enter)="onPurchase()"
-               autocomplete="off">
-    </mat-form-field>
-</mat-dialog-content>
-<mat-dialog-content class="centered-text" *ngIf="purchaseCompleted">
-    <mat-icon class="purchase-icon" color="accent">done</mat-icon>
-</mat-dialog-content>
-<mat-dialog-content class="centered-text rotate" *ngIf="purchaseInProgress">
-    <mat-icon class="purchase-icon" color="accent">sync</mat-icon>
-</mat-dialog-content>
+@if (state == "COMPLETE") {
+    <h1 mat-dialog-title>Purchase complete. Order number: <u>{{ orderId }}</u></h1>
+} @else {
+    <h1 mat-dialog-title>Please pay {{ total }}Kr</h1>
+}
+@switch (state) {
+    @case("COMPLETE") {
+        <mat-dialog-content class="centered-text">
+            <mat-icon class="purchase-icon" color="accent">done</mat-icon>
+        </mat-dialog-content>
+    }
+    @case ("IN_PROGRESS") {
+        <mat-dialog-content class="centered-text">
+            <mat-spinner></mat-spinner>
+        </mat-dialog-content>
+    }
+    @default {
+        <mat-dialog-content>
+            <mat-form-field>
+                <mat-label>Badge number</mat-label>
+                <input type="password"
+                       matInput
+                       [(ngModel)]="badge"
+                       (keyup.enter)="onPurchaseCredit()"
+                       autocomplete="off">
+                @if (badge) {
+                    <button matSuffix matIconButton aria-label="Purchase" (click)="onPurchaseCredit()">
+                        <mat-icon>shopping_cart_checkout</mat-icon>
+                    </button>
+                }
+            </mat-form-field>
+            <button (click)="onPurchaseCard()"
+                    matFab
+                    extended
+                    title="Pay with card">
+                <mat-icon>credit_card</mat-icon>
+                Pay with card
+            </button>
+        </mat-dialog-content>
+    }
+}
 <mat-dialog-actions>
-    <button mat-button [disabled]="purchaseInProgress" (click)="onCancel()">Close</button>
-    <button *ngIf="!purchaseCompleted"
-            [disabled]="purchaseInProgress"
-            mat-raised-button color="primary"
-            (click)="onPurchase()">
-        Purchase
-    </button>
+    <button mat-button [disabled]="state === 'IN_PROGRESS'" (click)="onCancel()">Close</button>
 </mat-dialog-actions>

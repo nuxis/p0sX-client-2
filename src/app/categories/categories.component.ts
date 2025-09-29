@@ -1,21 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
 import {StockService} from "@services/stock.service";
-import {ICategory} from "@models/pos";
 
 @Component({
     selector: 'categories',
     templateUrl: './categories.component.html',
-    styleUrls: ['./categories.component.scss']
+    styleUrls: ['./categories.component.scss'],
+    standalone: false
 })
-export class CategoriesComponent implements OnInit
+export class CategoriesComponent
 {
 
-    constructor(private http: HttpClient, private stockService: StockService)
-    {
-    }
-
-    ngOnInit(): void
+    constructor(private stockService: StockService)
     {
     }
 
@@ -30,6 +25,4 @@ export class CategoriesComponent implements OnInit
     }
 
     selectedOptions: (number | undefined)[] = [undefined];
-    trackByFn = (index: number, category: ICategory) => category.id;
-
 }

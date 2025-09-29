@@ -1,12 +1,12 @@
 <mat-selection-list [(ngModel)]="selectedOptions" [multiple]="false">
-    <mat-list-option [value]="undefined" (click)="setCategory(undefined)">
-        All
+  <mat-list-option [value]="undefined" (click)="setCategory(undefined)">
+    All
+  </mat-list-option>
+  <mat-divider></mat-divider>
+  @for (category of categories | async; track category.id) {
+    <mat-list-option [value]="category.id" (click)="setCategory(category.id)">
+      {{category.name}}
     </mat-list-option>
     <mat-divider></mat-divider>
-    <ng-container *ngFor="let category of categories | async;trackBy: trackByFn" >
-        <mat-list-option [value]="category.id" (click)="setCategory(category.id)">
-            {{category.name}}
-        </mat-list-option>
-        <mat-divider></mat-divider>
-    </ng-container>
+  }
 </mat-selection-list>

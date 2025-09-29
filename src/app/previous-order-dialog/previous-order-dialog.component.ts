@@ -1,14 +1,15 @@
 import {Component, OnInit} from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {IOrder, IPurchaseInput, PaymentMethod} from "@models/pos";
 import {ConfigService} from "@services/config.service";
+import {MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'previous-order-dialog',
-  templateUrl: './previous-order-dialog.component.html',
-  styleUrls: ['./previous-order-dialog.component.scss']
+    selector: 'previous-order-dialog',
+    templateUrl: './previous-order-dialog.component.html',
+    styleUrls: ['./previous-order-dialog.component.scss'],
+    standalone: false
 })
 export class PreviousOrderDialog implements OnInit {
 

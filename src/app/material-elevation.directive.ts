@@ -1,7 +1,8 @@
 import {Directive, ElementRef, HostListener, Input, Renderer2, OnChanges, SimpleChanges} from '@angular/core';
 
 @Directive({
-    selector: '[mat-elevation]'
+    selector: '[mat-elevation]',
+    standalone: false
 })
 export class MaterialElevationDirective implements OnChanges
 {
@@ -9,12 +10,9 @@ export class MaterialElevationDirective implements OnChanges
     public defaultElevation: number = 2;
 
     @Input()
-    public raisedElevation: number = 8;
+    public raisedElevation: number = 3;
 
-    constructor(
-        private element: ElementRef<HTMLElement>,
-        private renderer: Renderer2
-    )
+    constructor(private element: ElementRef<HTMLElement>, private renderer: Renderer2)
     {
         this.setElevation(this.defaultElevation);
     }
@@ -38,13 +36,6 @@ export class MaterialElevationDirective implements OnChanges
 
     setElevation(amount: number)
     {
-        const classesToRemove = Array.from(this.element.nativeElement.classList).filter(c => c.startsWith('mat-elevation-z'));
-        for(const c of classesToRemove)
-        {
-            this.renderer.removeClass(this.element.nativeElement, c);
-        }
-
-        const newClass = `mat-elevation-z${amount}`;
-        this.renderer.addClass(this.element.nativeElement, newClass);
+        this.renderer.setStyle(this.element.nativeElement, "box-shadow", `var(--mat-sys-level${amount}`);
     }
 }

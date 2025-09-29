@@ -1,6 +1,15 @@
-<div class="grid-wrapper">
-    <item-grid-entry *ngFor="let item of items | async; trackBy: trackByFn"
-                     [item]="item"
-                     (click)="onItemClick(item)">
-    </item-grid-entry>
-</div>
+@for (item of items | async; track trackByFn($index, item)) {
+    <div (click)="onItemClick(item)"
+         class="grid-item"
+         [class.disabled]="item.stock <= 0"
+         mat-ripple
+         mat-elevation
+         [title]="item.name">
+        <img [alt]="'Image of ' + item.name" mat-card-image [src]="item.image ?? DEFAULT_IMAGE_URL">
+        <div class="border">{{ item.name }}</div>
+        <div>{{ item.price }} Kr</div>
+        @if (item.stock <= 0) {
+            <div class="disabled-overlay"></div>
+        }
+    </div>
+}

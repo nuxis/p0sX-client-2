@@ -1,26 +1,20 @@
-<h1 mat-dialog-title>Customize {{itemName}} | {{totalPrice}} Kr.</h1>
-<div mat-dialog-content >
-    <div class="ingredient-list">
-        <ng-container *ngFor="let ingredient of ingredients" [ngSwitch]="ingredient.selected">
-            <button *ngSwitchCase="true"
-                    (click)="onIngredientToggle(ingredient)"
-                    mat-raised-button
-                    color="primary">
-                {{ingredient.name}}
-                <span *ngIf="ingredient.price > 0">+{{ingredient.price}},-</span>
-                <span *ngIf="ingredient.price < 0">-{{ingredient.price}},-</span>
-            </button>
-            <button *ngSwitchCase="false"
-                    (click)="onIngredientToggle(ingredient)"
-                    mat-stroked-button>
-                {{ingredient.name}}
-                <span *ngIf="ingredient.price > 0">+{{ingredient.price}},-</span>
-                <span *ngIf="ingredient.price < 0">-{{ingredient.price}},-</span>
-            </button>
-        </ng-container>
-    </div>
+<h1 mat-dialog-title>Customize {{ itemName }} | {{ totalPrice }} Kr.</h1>
+<div mat-dialog-content>
+    <section class="ingredient-list">
+        @for (ingredient of ingredients; track ingredient) {
+            <mat-checkbox (click)="onIngredientToggle(ingredient)" [ngModel]="ingredient.selected">
+                {{ ingredient.name }}
+                @if (ingredient.price > 0) {
+                    +{{ ingredient.price }},-
+                }
+                @else if (ingredient.price < 0) {
+                    -{{ ingredient.price }},-
+                }
+            </mat-checkbox>
+        }
+    </section>
 </div>
 <mat-dialog-actions>
-    <button mat-button (click)="onCancel()">Cancel</button>
-    <button mat-raised-button color="primary" (click)="onReturn()" cdkFocusInitial>{{data.isEdit ? 'Update' : 'Add to cart'}}</button>
+    <button matButton (click)="onCancel()">Cancel</button>
+    <button matButton (click)="onReturn()">{{ data.isEdit ? 'Update' : 'Add to cart' }}</button>
 </mat-dialog-actions>

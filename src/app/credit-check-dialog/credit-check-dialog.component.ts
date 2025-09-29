@@ -1,15 +1,16 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {MatDialogRef} from "@angular/material/dialog";
-import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {AfterViewInit, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import {ICreditCheck} from "@models/pos";
-import {MatSnackBar} from "@angular/material/snack-bar";
 import {ConfigService} from "@services/config.service";
 import {MatInput} from "@angular/material/input";
+import {MatDialogRef} from "@angular/material/dialog";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'credit-check-dialog',
-  templateUrl: './credit-check-dialog.component.html',
-  styleUrls: ['./credit-check-dialog.component.scss']
+    selector: 'credit-check-dialog',
+    templateUrl: './credit-check-dialog.component.html',
+    styleUrls: ['./credit-check-dialog.component.scss'],
+    standalone: false
 })
 export class CreditCheckDialogComponent implements AfterViewInit {
     badge: string = "";
@@ -20,7 +21,8 @@ export class CreditCheckDialogComponent implements AfterViewInit {
     constructor(public dialogRef: MatDialogRef<CreditCheckDialogComponent>,
                 private config: ConfigService,
                 private http: HttpClient,
-                private snackbar: MatSnackBar) {}
+                private snackbar: MatSnackBar,
+                private changeDetector: ChangeDetectorRef) {}
 
     credit: number = 0;
     left: number = 0;
@@ -42,13 +44,14 @@ export class CreditCheckDialogComponent implements AfterViewInit {
 
     onEnter()
     {
-        this.http.get<ICreditCheck>(`${this.config.baseUrl}/credit/${this.badge}`)
+        this.http.get<ICreditCheck>(`${this.config.baseUrl}/credit/${this.badge}/`)
             .subscribe({
                 next: result =>
                 {
                     this.credit = result.credit_limit;
                     this.left = result.left;
                     this.badge = "";
+                    this.changeDetector.detectChanges();
                 },
                 error: (e: HttpErrorResponse) =>
                 {
@@ -57,6 +60,7 @@ export class CreditCheckDialogComponent implements AfterViewInit {
                     this.badge = "";
                     const error = e.status === 404 ? "User not found" : "Failed to get credit";
                     this.snackbar.open(error, "Close");
+                    this.changeDetector.detectChanges();
                 }
             });
      }

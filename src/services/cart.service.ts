@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
 import {ICartEntry} from "@models/pos";
+import {map} from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,11 @@ export class CartService
     public get cartValue()
     {
         return this.cart$.value;
+    }
+
+    get totalObservable()
+    {
+        return this.cart$.pipe(map(value => value.reduce((t, entry) => t + entry.price, 0)));
     }
 
     get total()
