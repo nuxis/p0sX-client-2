@@ -3,12 +3,12 @@ import {HttpClient} from "@angular/common/http";
 import {DEFAULT_IMAGE_URL, ICartEntry, IItem, PaymentMethod} from "@models/pos";
 import {CartService} from "@services/cart.service";
 import {StockService} from "@services/stock.service";
-import {MatDialog} from "@angular/material/dialog";
 import {
     CustomizeItemDialogComponent,
     ICustomizeItemDialogInput
 } from "../customize-item-dialog/customize-item-dialog.component";
 import {PurchaseDialogComponent} from "../purchase-dialog/purchase-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 
 interface IDiscountResult
 {
@@ -19,7 +19,8 @@ interface IDiscountResult
 @Component({
     selector: 'cart',
     templateUrl: './cart.component.html',
-    styleUrls: ['./cart.component.scss']
+    styleUrls: ['./cart.component.scss'],
+    standalone: false
 })
 export class CartComponent implements OnInit
 {
@@ -49,7 +50,7 @@ export class CartComponent implements OnInit
 
     get total()
     {
-        return this.cartService.total;
+        return this.cartService.totalObservable;
     }
 
     getItemImage(item: IItem)
@@ -100,7 +101,7 @@ export class CartComponent implements OnInit
 
     onPurchase()
     {
-        this.addDiscounts();
+        this.addDiscounts(PaymentMethod.Credit);
         const dialogRef = this.dialog
             .open<PurchaseDialogComponent>(
                 PurchaseDialogComponent,
@@ -128,14 +129,16 @@ export class CartComponent implements OnInit
         }
     }
 
-    private addDiscounts()
+    private addDiscounts(method: PaymentMethod)
     {
         //TODO: This client currently only supports credit as payment type
-        const discounts = this.stockService.discounts().filter(x => x.payment_method == PaymentMethod.Credit);
+        const discounts = this.stockService.discounts().filter(x => x.payment_method == method);
         let cartItems = [...this.cart];
         for(const discount of discounts)
         {
             const item = this.stockService.resolveItemId(discount.item)!;
+
+            // eslint-disable-next-line no-eval
             const func = eval(discount.expression) as (cart: ICartEntry[]) => IDiscountResult;
             const result = func(cartItems);
             for(const item of result.used)

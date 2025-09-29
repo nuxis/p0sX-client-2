@@ -1,6 +1,6 @@
 import {Component, HostListener, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ICartEntry, IngredientId} from "@models/pos";
+import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 export interface ICustomizeItemDialogInput
 {
@@ -18,9 +18,10 @@ interface IIngredientSelection
 }
 
 @Component({
-  selector: 'customize-item-dialog',
-  templateUrl: './customize-item-dialog.component.html',
-  styleUrls: ['./customize-item-dialog.component.scss']
+    selector: 'customize-item-dialog',
+    templateUrl: './customize-item-dialog.component.html',
+    styleUrls: ['./customize-item-dialog.component.scss'],
+    standalone: false
 })
 export class CustomizeItemDialogComponent implements OnInit {
 
@@ -72,14 +73,14 @@ export class CustomizeItemDialogComponent implements OnInit {
 
     onIngredientToggle(ingredient: IIngredientSelection)
     {
+        ingredient.selected = !ingredient.selected;
         if (ingredient.exclusive)
         {
-            this.ingredients.forEach(x => x.selected = false);
-            ingredient.selected = true;
+            this.ingredients.filter(x => !x.exclusive).forEach(x => x.selected = false);
         }
         else
         {
-            ingredient.selected = !ingredient.selected;
+            this.ingredients.filter(x => x.exclusive).forEach(x => x.selected = false);
         }
     }
 

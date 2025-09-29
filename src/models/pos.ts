@@ -4,7 +4,23 @@ export enum PaymentMethod
 {
     Cash = 0,
     Credit = 1,
+    Card = 2,
+    Prepaid = 4,
     Undo = 7
+}
+
+export enum OrderState {
+    Open = 0,
+    Processing = 1,
+    Done = 2,
+    Archived = 3
+}
+
+export enum PaymentState {
+    Paid = 0,
+    Pending = 1,
+    Failed = 2,
+    Cancelled = 3
 }
 
 type ItemId = number;
@@ -62,7 +78,7 @@ export interface IPurchaseInput
     readonly payment_method: PaymentMethod;
     readonly message?: string;
     readonly cashier_card: string;
-    readonly card: string;
+    readonly card: string | undefined;
     readonly undo: boolean;
     readonly lines: {
         readonly item: ItemId;
@@ -76,6 +92,7 @@ export interface ICreditCheck
     readonly used: number;
     readonly credit_limit: number;
     readonly left: number;
+    readonly is_crew: boolean;
 }
 
 export interface IUser
@@ -109,4 +126,6 @@ export interface IOrder
     readonly message: string;
     readonly payment_method: PaymentMethod;
     readonly undo: boolean;
+    readonly state: OrderState;
+    readonly payment_state: PaymentState
 }

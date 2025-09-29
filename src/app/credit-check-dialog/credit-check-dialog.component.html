@@ -6,8 +6,13 @@
     <mat-form-field appearance="fill">
         <mat-label>Badge number</mat-label>
         <input type="password" matInput [(ngModel)]="badge" (keyup.enter)="onEnter()" autocomplete="off">
+        @if (badge) {
+            <button matSuffix matIconButton aria-label="Check credit" (click)="onEnter()">
+                <mat-icon>shopping_cart_checkout</mat-icon>
+            </button>
+        }
     </mat-form-field>
 </div>
 <mat-dialog-actions>
-    <button mat-raised-button color="primary" (click)="onCancel()">Close</button>
+    <button mat-button (click)="onCancel()">Close</button>
 </mat-dialog-actions>
