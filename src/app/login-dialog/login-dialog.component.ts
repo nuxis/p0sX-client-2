@@ -1,14 +1,16 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, ViewChild} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
+import {IUser} from "@models/pos";
+import {ConfigService} from "@services/config.service";
+import {MatInput} from "@angular/material/input";
 import {MatDialogRef} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatInput} from "@angular/material/input";
-import {HttpClient} from "@angular/common/http";
-import {BASE_URL, IUser} from "@models/pos";
 
 @Component({
-  selector: 'login-dialog',
-  templateUrl: './login-dialog.component.html',
-  styleUrls: ['./login-dialog.component.scss']
+    selector: 'login-dialog',
+    templateUrl: './login-dialog.component.html',
+    styleUrls: ['./login-dialog.component.scss'],
+    standalone: false
 })
 export class LoginDialogComponent implements AfterViewInit {
     badge: string = "";
@@ -18,8 +20,10 @@ export class LoginDialogComponent implements AfterViewInit {
     private badgeInput: MatInput | undefined = undefined;
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent, IUser>,
+                private config: ConfigService,
                 private http: HttpClient,
-                private snackbar: MatSnackBar) {}
+                private snackbar: MatSnackBar,
+                private changeDetector: ChangeDetectorRef) {}
 
     ngAfterViewInit()
     {
@@ -40,22 +44,28 @@ export class LoginDialogComponent implements AfterViewInit {
         }
 
         this.http
-            .get<IUser[]>(`${BASE_URL}/user/?format=json&card=${this.badge}`)
-            .subscribe(users => {
-                this.badge = "";
-                if(!users || users.length === 0)
-                {
-                    this.snackbar.open("User not found", "Close");
-                    return;
-                }
+            .get<IUser>(`${this.config.baseUrl}/user/${this.badge}/?format=json`)
+            .subscribe({
+                next: user => {
+                    this.badge = "";
+                    if(!user)
+                    {
+                        this.snackbar.open("User not found", "Close");
+                        return;
+                    }
 
-                const user = users[0];
-                if(!user.is_cashier)
-                {
-                    this.snackbar.open("You must be a cashier to log in", "Close");
-                    return;
+                    if(!user.is_cashier)
+                    {
+                        this.snackbar.open("You must be a cashier to log in", "Close");
+                        return;
+                    }
+                    this.dialogRef.close(user);
+                },
+                error: (e: HttpErrorResponse) => {
+                    this.badge = "";
+                    this.snackbar.open(e.status == 404 ? "User not found" : "Failed to get user", "Close");
+                    this.changeDetector.detectChanges();
                 }
-                this.dialogRef.close(user);
             });
     }
 }

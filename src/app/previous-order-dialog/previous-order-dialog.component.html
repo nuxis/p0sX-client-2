@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>Order {{ order.id }}</h1>
+<div mat-dialog-content>
+    @for (line of order.lines; track line) {
+        <div>
+            <b>{{ line.id }}</b> - {{ line.item.name }}
+            @if (line.ingredients.length > 0) {
+                with
+                @for (ingredient of line.ingredients; track ingredient; let last = $last) {
+                    <span>
+                        {{ ingredient.name }}
+                        @if (!last) {
+                            ,
+                        }
+                    </span>
+                }
+            }
+        </div>
+    }
+</div>
+<mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Close</button>
+    <button mat-button (click)="onUndoOrder()">Undo</button>
+</mat-dialog-actions>

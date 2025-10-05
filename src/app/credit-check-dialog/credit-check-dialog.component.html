@@ -1,11 +1,16 @@
 <h1 mat-dialog-title>Scan badge to check credit</h1>
 <div mat-dialog-content>
-    <div class="credit">
+    <h2 class="credit">
         This person has {{left}},- of {{credit}},- remaining.
-    </div>
+    </h2>
     <mat-form-field appearance="fill">
         <mat-label>Badge number</mat-label>
         <input type="password" matInput [(ngModel)]="badge" (keyup.enter)="onEnter()" autocomplete="off">
+        @if (badge) {
+            <button matSuffix matIconButton aria-label="Check credit" (click)="onEnter()">
+                <mat-icon>shopping_cart_checkout</mat-icon>
+            </button>
+        }
     </mat-form-field>
 </div>
 <mat-dialog-actions>

@@ -1,3 +1,5 @@
+@use '@angular/material' as mat;
+
 :host {
     display: flex;
     flex-direction: column;
@@ -16,14 +18,9 @@ mat-dialog-content.mat-dialog-content {
 
 .centered-text {
     text-align: center;
-}
-
-.rotate {
-    overflow: hidden;
-    .purchase-icon {
-        overflow: hidden;
-        animation: rotation 2s infinite linear;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 @keyframes rotation  {
@@ -33,4 +30,10 @@ mat-dialog-content.mat-dialog-content {
     to{
         transform: rotate(-359deg);
     }
+}
+
+.foo {
+    @include mat.fab-overrides((
+        touch-target-display: 50px,
+    ));
 }

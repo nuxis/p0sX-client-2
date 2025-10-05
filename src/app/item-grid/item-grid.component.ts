@@ -1,19 +1,20 @@
-import {Component} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
-import {ICartEntry, IItem} from '@models/pos';
-import {MatDialog} from "@angular/material/dialog";
+import {ChangeDetectorRef, Component} from '@angular/core';
+import { HttpClient } from "@angular/common/http";
+import {DEFAULT_IMAGE_URL, ICartEntry, IItem} from '@models/pos';
 import {CartService} from "@services/cart.service";
 import {StockService} from "@services/stock.service";
 import {
     CustomizeItemDialogComponent,
     ICustomizeItemDialogInput
 } from "../customize-item-dialog/customize-item-dialog.component";
+import {MatDialog} from "@angular/material/dialog";
 import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
     selector: 'item-grid',
     templateUrl: './item-grid.component.html',
-    styleUrls: ['./item-grid.component.scss']
+    styleUrls: ['./item-grid.component.scss'],
+    standalone: false
 })
 export class ItemGridComponent
 {
@@ -21,7 +22,8 @@ export class ItemGridComponent
                 private dialog: MatDialog,
                 private stockService: StockService,
                 private cartService: CartService,
-                private snackbar: MatSnackBar)
+                private snackbar: MatSnackBar,
+                private changeDetector: ChangeDetectorRef)
     {
     }
 
@@ -38,7 +40,7 @@ export class ItemGridComponent
         {
             this.snackbar.open(`${item.name} is not in stock`, "Close");
         }
-        else if(item.created_in_the_kitchen && item.ingredients && item.ingredients.length > 0)
+        else if(item.ingredients && item.ingredients.length > 0)
         {
             this.openDialog(item);
         }
@@ -70,8 +72,11 @@ export class ItemGridComponent
             if(result)
             {
                 this.cartService.addToCart(result);
+                this.changeDetector.detectChanges();
             }
         });
     }
+
+    public readonly DEFAULT_IMAGE_URL = DEFAULT_IMAGE_URL;
 }
 
